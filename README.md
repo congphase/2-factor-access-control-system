@@ -1,2 +1,0 @@
-# lffd
-stand alone dir
