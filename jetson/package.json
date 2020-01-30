@@ -1,0 +1,23 @@
+{
+  "name": "doorgate",
+  "version": "0.6.9",
+  "description": "",
+  "main": "server.js",
+  "author": "Men",
+  "license": "ISC",
+  "dependencies": {
+    "alarm": "^2.0.0",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
+    "cookies": "^0.7.3",
+    "express": "^4.17.1",
+    "express-session": "^1.16.2",
+    "mysql": "^2.17.1",
+    "node-schedule": "^1.3.2",
+    "nodemailer": "^6.3.1",
+    "nodemon": "^1.19.3",
+    "popper.js": "^1.15.0",
+    "python-shell": "^1.0.8",
+    "socket.io": "^2.3.0"
+  }
+}
