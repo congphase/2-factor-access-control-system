@@ -18,7 +18,9 @@ import subprocess
 import cv2
 
 
-WINDOW_NAME = 'CameraDemo'
+CAP_WINDOW_NAME = 'CameraDemo'
+VERIF_WINDOW_NAME = 'VerificationWindow'
+
 
 
 def parse_args():
@@ -95,11 +97,11 @@ def open_cam_onboard(width, height):
     return cv2.VideoCapture(gst_str, cv2.CAP_GSTREAMER)
 
 
-def open_window(width, height):
-    cv2.namedWindow(WINDOW_NAME, cv2.WINDOW_NORMAL)
-    cv2.resizeWindow(WINDOW_NAME, width, height)
-    cv2.moveWindow(WINDOW_NAME, 0, 0)
-    cv2.setWindowTitle(WINDOW_NAME, 'Camera feed')
+def open_window(width, height, window_name, window_title):
+    cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
+    cv2.resizeWindow(window_name, width, height)
+    cv2.moveWindow(window_name, 0, 0)
+    cv2.setWindowTitle(window_name, window_title)
 
 
 def read_cam(cap):
@@ -156,7 +158,7 @@ def main():
     if not cap.isOpened():
         sys.exit('Failed to open camera!')
 
-    open_window(args.image_width, args.image_height)
+    open_window(args.image_width, args.image_height, WINDOW_NAME, 'Camera feed')
     read_cam(cap)
 
     cap.release()

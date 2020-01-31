@@ -25,12 +25,12 @@ def get_smpl_encs(candidate_id, current_time):
     :return: a python list of that candidate's sample encodings
     """
     candidate_full_name = tnt_name_tup[candidate_id]
-    print("[log  ] Getting smpl embs for {} ... ".format(candidate_full_name))
+    print(f"[   info] getting smpl embs for {candidate_full_name} ... ")
 
     tnt_smpl_embs_dir = api_dirs.tnt_smpl_embs_dir
     for file in os.listdir(tnt_smpl_embs_dir):
-        if file.startswith(str(candidate_id) + "_{}".format(current_time)) and file.endswith(".npy"):
+        if file.startswith(str(candidate_id) + f"_{current_time}") and file.endswith(".npy"):
             candidate_smpl_encs_list = np.load(os.path.join(tnt_smpl_embs_dir, file))
-            print("[log  ] file used: {}".format(file))
+            print("[   info] file used: {}".format(file))
 
     return list(candidate_smpl_encs_list)

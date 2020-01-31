@@ -50,9 +50,6 @@ MSG_HAY_QUET_LAI_THE_VA_NHIN_THANG_VAO_CAMERA = "MSG_HAY_QUET_LAI_THE_VA_NHIN_TH
 
 # VARIABLES
 
-# Window names
-CAP_WINDOW_NAME = 'CameraDemo'
-
 
 def parse_args():
     # Parse input arguments
@@ -364,34 +361,6 @@ class Inference_TensorRT:
             return bbox_collection_numpy
 
 
-def draw_border(img, pt1, pt2, color, thickness, r, d):
-    x1, y1 = pt1
-    x2, y2 = pt2
-
-    line = cv2.line
-    ellipse = cv2.ellipse
-
-    # Top left
-    line(img, (x1 + r, y1), (x1 + r + d, y1), color, thickness)
-    line(img, (x1, y1 + r), (x1, y1 + r + d), color, thickness)
-    ellipse(img, (x1 + r, y1 + r), (r, r), 180, 0, 90, color, thickness)
-
-    # Top right
-    line(img, (x2 - r, y1), (x2 - r - d, y1), color, thickness)
-    line(img, (x2, y1 + r), (x2, y1 + r + d), color, thickness)
-    ellipse(img, (x2 - r, y1 + r), (r, r), 270, 0, 90, color, thickness)
-
-    # Bottom left
-    line(img, (x1 + r, y2), (x1 + r + d, y2), color, thickness)
-    line(img, (x1, y2 - r), (x1, y2 - r - d), color, thickness)
-    ellipse(img, (x1 + r, y2 - r), (r, r), 90, 0, 90, color, thickness)
-
-    # Bottom right
-    line(img, (x2 - r, y2), (x2 - r - d, y2), color, thickness)
-    line(img, (x2, y2 - r), (x2, y2 - r - d), color, thickness)
-    ellipse(img, (x2 - r, y2 - r), (r, r), 0, 0, 90, color, thickness)
-
-
 import cProfile, pstats, io
 
 
@@ -415,8 +384,7 @@ def profile(fnc):
     return inner
 
 
-@profile
-def run_inference(cap, video_out, anchor_conf, current_time):
+def run_inference(cap, anchor_conf, current_time):
     """
     :param cap: input video needed to be processed, or, rtsp/usb/onboard camera feed
     :param video_out: output video of the process, used for re-checking
@@ -433,7 +401,7 @@ def run_inference(cap, video_out, anchor_conf, current_time):
     line = cv2.line
     imshow = cv2.imshow
     imwrite = cv2.imwrite
-    WINDOW_NAME = tegra_cam.WINDOW_NAME
+    WINDOW_NAME = tegra_cam.CAP_WINDOW_NAME
     rectangle = cv2.rectangle
     cvtColor = cv2.cvtColor
     COLOR_BGR2RGB = cv2.COLOR_BGR2RGB
@@ -448,16 +416,13 @@ def run_inference(cap, video_out, anchor_conf, current_time):
     pop_context = pycuda.autoinit.context.pop
     push_context = pycuda.autoinit.context.push
 
+    face_root_dir = api_dirs.face_dir
+
     '''
     ********************************************************************************************************************
         VIDEO FILE/VIDEO STREAM HANDLING 
     ********************************************************************************************************************
     '''
-
-    # Initialize video stuff
-    #fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    #output_movie = cv2.VideoWriter(video_out, fourcc, 24, (rtsp_cam.WIDTH, rtsp_cam.HEIGHT))
-    #movie_write = output_movie.write
 
 
     '''
@@ -494,7 +459,6 @@ def run_inference(cap, video_out, anchor_conf, current_time):
             print('[   info] camera feed ends')
             break
         
-        line(frame, (960, 0), (960, 720), YELLOW, 1)
         imshow(WINDOW_NAME, frame)
 
         # Only process every other frame of video to save time
@@ -590,12 +554,20 @@ def run_inference(cap, video_out, anchor_conf, current_time):
                 matches = compare_faces(candidate_known_encs, face_encoding, 0.5)
                 toc = get_time()
 
+                # Showing verification window
+                face_left = frame[bb_top:bb_bottom, bb_left:bb_right]
+                person_dir = os.path.join(face_root_dir, str(candidate_id))
+                
+                for file_ in os.listdir(person_dir):
+                    template_face = imread(os.path.join(person_dir, file_), cv2.IMREAD_COLOR)
+
                 print(f'[  debug] comparing encodings takes: {(toc-tic):.4f}s')
                 print(f'[  debug] matches: {matches}')
 
                 # If num of matches is over 50%, then it's it
                 print(f'[  debug] True/total: {matches.count(True)}/{len(matches)}')
 
+                
                 if matches.count(True) > (len(matches) / 2):
                     file_ = open(r"/home/gate/lffd-dir/msg_buffer.txt", 'w')
                     file_.write(MSG_XAC_THUC_KHUON_MAT_THANH_CONG)
@@ -744,7 +716,7 @@ def run_inference(cap, video_out, anchor_conf, current_time):
 
 #        process_this_frame = not process_this_frame
 
-
+@profile
 def main():
     args = parse_args()
     print('Called with args:')
@@ -766,7 +738,8 @@ def main():
     if not cap.isOpened():
         sys.exit('Failed to open camera!')
 
-    tegra_cam.open_window(args.image_width, args.image_height)
+    tegra_cam.open_window(args.image_width, args.image_height, tegra_cam.CAP_WINDOW_NAME, 'Camera feed')
+    tegra_cam.open_window(640, 360, tegra_cam.VERIF_WINDOW_NAME, 'Verification Window')
 
     # get current time when this script is called
     now = datetime.now()
@@ -778,7 +751,7 @@ def main():
         current_time = 'n'
 
 
-    run_inference(cap, 'out.avi', 1.7, current_time)
+    run_inference(cap, 1.7, current_time)
 
     cv2.destroyAllWindows()
 
