@@ -15,5 +15,3 @@ Read our poster [here](docs/poster.pdf), and thesis [here](docs/thesis_2_factor_
 
 ## Disclaimer
 Please ignore if this thesis is somehow poorly scientifically-backed. Well, after 2 years, now looking back at it, a little bit ashamed when making it public. However, I feel grateful, for the past, and to my teammate-bro /:v
-
-## End
