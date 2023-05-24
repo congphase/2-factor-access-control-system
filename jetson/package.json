@@ -18,6 +18,6 @@
     "nodemon": "^2.0.22",
     "popper.js": "^1.15.0",
     "python-shell": "^1.0.8",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.5.0"
   }
 }
