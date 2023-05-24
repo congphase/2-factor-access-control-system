@@ -7,10 +7,10 @@
   "license": "ISC",
   "dependencies": {
     "alarm": "^2.0.0",
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.1",
     "cookie-parser": "^1.4.4",
     "cookies": "^0.7.3",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "express-session": "^1.16.2",
     "mysql": "^2.17.1",
     "node-schedule": "^1.3.2",
