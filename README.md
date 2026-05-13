@@ -14,4 +14,4 @@ Hope it is useful in some way for you, who is comming across this.
 Read our poster [here](docs/poster.pdf), and thesis [here](docs/thesis-2-factor-complete-access-control-system-using-rfid-facial-recognition.pdf)
 
 ## Disclaimer
-Please ignore if this thesis is somehow poorly scientifically-backed. Well, after 2 years, now looking back at it, a little bit ashamed when making it public. However, I feel grateful, for the past, and to my teammate-bro /:v
+Please ignore if this thesis is somehow not scientifically rigorous. In fact, it is more engineering. Well, after 2 years, now looking back at it, a little bit ashamed when making it public. However, I feel grateful, for the past, and to my teammate-bro /:v
